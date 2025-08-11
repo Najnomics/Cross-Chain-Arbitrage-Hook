@@ -29,7 +29,7 @@ library ChainConstants {
     address public constant WETH_OPTIMISM = 0x4200000000000000000000000000000000000006;
     
     // USDC addresses
-    address public constant USDC_MAINNET = 0xa0b86a33E6441A8CcA877a7f0b5c5a67b82F6D7A;
+    address public constant USDC_MAINNET = 0xa0b86a33e6441A8CcA877a7f0b5c5a67b82F6D7A;
     address public constant USDC_ARBITRUM = 0xaf88d065e77c8cC2239327C5EDb3A432268e5831;
     address public constant USDC_BASE = 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913;
     address public constant USDC_POLYGON = 0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174;
