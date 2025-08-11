@@ -151,7 +151,7 @@ library MEVProtection {
     function getOptimalExecutionParams(
         uint256 expectedGasPrice,
         uint256 maxSlippage
-    ) internal pure returns (
+    ) internal view returns (
         uint256 optimalGasPrice,
         uint256 optimalSlippage,
         uint256 executionDelay
