@@ -313,6 +313,25 @@ contract CrossChainArbitrageHook is BaseHook, IArbitrageHook, Ownable, Reentranc
         address user,
         ArbitrageOpportunity memory opportunity
     ) internal returns (bytes32 intentId) {
+        // Apply MEV protection if enabled
+        if (mevConfig.enabled) {
+            // Check MEV protection for the route
+            if (!opportunity.routeHash.checkMEVProtection()) {
+                revert Errors.FrontRunningDetected();
+            }
+        }
+        
+        // Use ArbitrageManager if available
+        if (address(arbitrageManager) != address(0)) {
+            try arbitrageManager.executeArbitrage(opportunity, user) returns (bool success, bytes32 id) {
+                if (success) {
+                    return id;
+                }
+            } catch {
+                // Fallback to direct execution
+            }
+        }
+        
         // Create cross-chain intent via Across Protocol
         return acrossConfig.createArbitrageIntent(opportunity, user);
     }
