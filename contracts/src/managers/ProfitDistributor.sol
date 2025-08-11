@@ -409,7 +409,7 @@ contract ProfitDistributor is ReentrancyGuard, Ownable, Pausable {
     
     function _addToRewardPool(address token, uint256 amount, address user) internal {
         if (!isTokenSupported[token]) {
-            addSupportedToken(token);
+            this.addSupportedToken(token);
         }
         
         RewardPool storage pool = rewardPools[token];
