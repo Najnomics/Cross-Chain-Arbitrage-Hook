@@ -310,11 +310,11 @@ library MEVProtection {
             TransactionFingerprint memory txData = recentTxs.transactions[i];
             
             // Check recent transactions in mempool
-            if (tx.blockNumber == currentTx.blockNumber || tx.blockNumber == currentTx.blockNumber - 1) {
-                if (tx.functionSelector == currentTx.functionSelector) {
-                    if (tx.gasPrice > currentTx.gasPrice + FRONT_RUNNING_GAS_THRESHOLD) {
+            if (txData.blockNumber == currentTx.blockNumber || txData.blockNumber == currentTx.blockNumber - 1) {
+                if (txData.functionSelector == currentTx.functionSelector) {
+                    if (txData.gasPrice > currentTx.gasPrice + FRONT_RUNNING_GAS_THRESHOLD) {
                         result.confidence = 85;
-                        result.suspiciousAddress = tx.from;
+                        result.suspiciousAddress = txData.from;
                         result.description = "Front-running attempt detected";
                         break;
                     }
