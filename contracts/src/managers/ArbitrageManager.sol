@@ -228,7 +228,7 @@ contract ArbitrageManager is ReentrancyGuard, Ownable {
         bytes32 opportunityId = keccak256(abi.encode(opportunity));
         
         // Validate opportunity
-        (bool isValid, string memory reason) = validateOpportunity(opportunity);
+        (bool isValid, string memory reason) = this.validateOpportunity(opportunity);
         if (!isValid) {
             emit ArbitrageValidated(opportunityId, false, reason);
             return (false, bytes32(0));
