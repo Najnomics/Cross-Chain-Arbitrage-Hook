@@ -336,8 +336,8 @@ library MEVProtection {
             TransactionFingerprint memory txData = recentTxs.transactions[i];
             
             // Check if this transaction follows the pattern
-            if (tx.blockNumber == currentTx.blockNumber + 1) {
-                if (tx.from == result.suspiciousAddress) {
+            if (txData.blockNumber == currentTx.blockNumber + 1) {
+                if (txData.from == result.suspiciousAddress) {
                     followingTxs++;
                 }
             }
