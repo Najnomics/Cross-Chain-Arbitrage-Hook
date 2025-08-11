@@ -307,7 +307,7 @@ library MEVProtection {
         
         // Look for transactions with significantly higher gas prices
         for (uint256 i = 0; i < recentTxs.count; i++) {
-            TransactionFingerprint memory tx = recentTxs.transactions[i];
+            TransactionFingerprint memory txData = recentTxs.transactions[i];
             
             // Check recent transactions in mempool
             if (tx.blockNumber == currentTx.blockNumber || tx.blockNumber == currentTx.blockNumber - 1) {
