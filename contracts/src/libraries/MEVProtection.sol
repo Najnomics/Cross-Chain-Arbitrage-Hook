@@ -172,7 +172,7 @@ library MEVProtection {
      * @return isMEVBot Whether the address is a known MEV bot
      * @return confidence Confidence level of the assessment
      */
-    function isMEVBot(address addr) internal pure returns (bool isMEVBot, uint256 confidence) {
+    function isMEVBot(address addr) internal pure returns (bool botDetected, uint256 confidence) {
         // In production, this would check against databases of known MEV bots
         // For now, implement basic heuristics
         
