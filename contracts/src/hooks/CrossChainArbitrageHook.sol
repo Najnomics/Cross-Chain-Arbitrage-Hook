@@ -418,4 +418,25 @@ contract CrossChainArbitrageHook is BaseHook, IArbitrageHook, Ownable, Reentranc
     function addSpokePool(uint256 chainId, address spokePool) external onlyOwner {
         acrossConfig.addSpokePool(chainId, spokePool);
     }
+    
+    function updateMEVProtection(bool enabled, uint256 delay) external onlyOwner {
+        mevConfig.enabled = enabled;
+        mevConfig.minExecutionDelay = delay;
+    }
+    
+    function setManagerContracts(
+        address _arbitrageManager,
+        address _chainManager,
+        address _profitDistributor
+    ) external onlyOwner {
+        if (_arbitrageManager != address(0)) {
+            arbitrageManager = ArbitrageManager(_arbitrageManager);
+        }
+        if (_chainManager != address(0)) {
+            chainManager = ChainManager(_chainManager);
+        }
+        if (_profitDistributor != address(0)) {
+            profitDistributor = ProfitDistributor(_profitDistributor);
+        }
+    }
 }
