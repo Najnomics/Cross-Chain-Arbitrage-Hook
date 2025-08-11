@@ -76,10 +76,31 @@ contract CrossChainArbitrageHook is BaseHook, IArbitrageHook, Ownable, Reentranc
     
     constructor(
         IPoolManager _poolManager,
-        address _acrossSpokePool
+        address _acrossSpokePool,
+        address _arbitrageManager,
+        address _chainManager,
+        address _profitDistributor
     ) BaseHook(_poolManager) Ownable(msg.sender) {
         // Initialize Across integration
         acrossConfig.initialize(_acrossSpokePool);
+        
+        // Initialize manager contracts
+        if (_arbitrageManager != address(0)) {
+            arbitrageManager = ArbitrageManager(_arbitrageManager);
+        }
+        if (_chainManager != address(0)) {
+            chainManager = ChainManager(_chainManager);
+        }
+        if (_profitDistributor != address(0)) {
+            profitDistributor = ProfitDistributor(_profitDistributor);
+        }
+        
+        // Initialize MEV protection
+        mevConfig.enabled = true;
+        mevConfig.commitRevealDelay = 30 seconds;
+        mevConfig.maxSlippage = 100; // 1% max slippage
+        mevConfig.minExecutionDelay = 5 seconds;
+        mevConfig.privateMempoolFee = 0.01 ether;
         
         // Initialize supported chains
         _initializeSupportedChains();
