@@ -34,10 +34,13 @@ contract DeployScript is Script {
         console2.log("Pool Manager:", poolManager);
         console2.log("Across SpokePool:", acrossSpokePool);
         
-        // Deploy the hook
+        // Deploy the hook (for now, with null manager addresses - will be set later)
         hook = new CrossChainArbitrageHook(
             IPoolManager(poolManager),
-            acrossSpokePool
+            acrossSpokePool,
+            address(0), // arbitrageManager - will be deployed separately
+            address(0), // chainManager - will be deployed separately  
+            address(0)  // profitDistributor - will be deployed separately
         );
         
         console2.log("CrossChainArbitrageHook deployed at:", address(hook));
