@@ -353,7 +353,21 @@ contract CrossChainArbitrageHook is BaseHook, IArbitrageHook, Ownable, Reentranc
         
         uint256 expectedOutput = (amountIn * remotePrice) / localPrice;
         uint256 bridgeFee = (amountIn * 10) / 10000; // 0.1% bridge fee
-        uint256 totalCosts = bridgeFee + gasCost;
+        
+        // Enhanced gas cost estimation
+        uint256 enhancedGasCost = gasCost;
+        if (address(chainManager) != address(0)) {
+            // Get more accurate gas estimates from ChainManager
+            try chainManager.checkArbitrageFeasibility(block.chainid, block.chainid, amountIn) returns (
+                bool, uint256 cost
+            ) {
+                enhancedGasCost = cost;
+            } catch {
+                // Use provided gas cost
+            }
+        }
+        
+        uint256 totalCosts = bridgeFee + enhancedGasCost;
         
         if (expectedOutput > amountIn + totalCosts) {
             uint256 profit = expectedOutput - amountIn - totalCosts;
