@@ -34,7 +34,7 @@ contract ArbitrageLibrariesTest is Test {
         assertTrue(profitBPS >= 0);
     }
     
-    function testIsProfitable() public pure {
+    function testIsProfitable() public view {
         IArbitrageHook.ArbitrageOpportunity memory opportunity = IArbitrageHook.ArbitrageOpportunity({
             tokenIn: address(0x1),
             tokenOut: address(0x2),
