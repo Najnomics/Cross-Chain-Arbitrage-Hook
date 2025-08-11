@@ -131,7 +131,7 @@ contract CrossChainArbitrageHook is BaseHook, IArbitrageHook, Ownable, Reentranc
         }
         
         // Execute normal swap if no profitable arbitrage
-        return (BaseHook._beforeSwap.selector, BeforeSwapDeltaLibrary.ZERO_DELTA, 0);
+        return (BaseHook.beforeSwap.selector, BeforeSwapDeltaLibrary.ZERO_DELTA, 0);
     }
     
     /**
