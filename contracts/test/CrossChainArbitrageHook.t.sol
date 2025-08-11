@@ -47,7 +47,7 @@ contract CrossChainArbitrageHookTest is Test {
     address bob = makeAddr("bob");
     
     address constant WETH = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
-    address constant USDC = 0xa0b86a33E6441A8CcA877a7f0b5c5a67b82F6D7A;
+    address constant USDC = 0xa0b86a33e6441A8CcA877a7f0b5c5a67b82F6D7A;
     
     function setUp() public {
         poolManager = new MockPoolManager();
