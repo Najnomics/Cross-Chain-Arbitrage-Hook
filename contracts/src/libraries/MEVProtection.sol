@@ -333,7 +333,7 @@ library MEVProtection {
         uint256 followingTxs = 0;
         
         for (uint256 i = 0; i < recentTxs.count; i++) {
-            TransactionFingerprint memory tx = recentTxs.transactions[i];
+            TransactionFingerprint memory txData = recentTxs.transactions[i];
             
             // Check if this transaction follows the pattern
             if (tx.blockNumber == currentTx.blockNumber + 1) {
