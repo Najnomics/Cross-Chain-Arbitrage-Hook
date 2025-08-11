@@ -279,14 +279,14 @@ library MEVProtection {
             TransactionFingerprint memory txData = recentTxs.transactions[i];
             
             // Check if transaction is in the detection window
-            if (tx.blockNumber + SANDWICH_DETECTION_WINDOW >= currentTx.blockNumber) {
-                if (tx.functionSelector == currentTx.functionSelector) {
+            if (txData.blockNumber + SANDWICH_DETECTION_WINDOW >= currentTx.blockNumber) {
+                if (txData.functionSelector == currentTx.functionSelector) {
                     matchingTxs++;
                     
                     // Check for suspicious gas price patterns
-                    if (tx.gasPrice > currentTx.gasPrice * 120 / 100) {
+                    if (txData.gasPrice > currentTx.gasPrice * 120 / 100) {
                         suspiciousGasPrices++;
-                        result.suspiciousAddress = tx.from;
+                        result.suspiciousAddress = txData.from;
                     }
                 }
             }
