@@ -306,15 +306,26 @@ contract ArbitrageManager is ReentrancyGuard, Ownable {
         address tokenIn,
         address tokenOut
     ) internal view returns (uint256 price) {
-        try priceRegistry.getPrice(tokenIn, block.chainid) returns (uint256 priceIn, uint256) {
-            try priceRegistry.getPrice(tokenOut, block.chainid) returns (uint256 priceOut, uint256) {
-                price = (priceIn * 1e18) / priceOut;
-            } catch {
-                price = 1e18; // 1:1 fallback
-            }
-        } catch {
+        // For internal calls, we can't use try-catch, so use direct calls with fallbacks
+        (bool success1, bytes memory data1) = address(this).staticcall(
+            abi.encodeWithSignature("getPrice(address,uint256)", tokenIn, block.chainid)
+        );
+        (bool success2, bytes memory data2) = address(this).staticcall(
+            abi.encodeWithSignature("getPrice(address,uint256)", tokenOut, block.chainid)
+        );
+        
+        if (success1 && success2) {
+            (uint256 priceIn,) = abi.decode(data1, (uint256, uint256));
+            (uint256 priceOut,) = abi.decode(data2, (uint256, uint256));
+            price = (priceIn * 1e18) / priceOut;
+        } else {
             price = 1e18; // 1:1 fallback
         }
+    }
+    
+    // Helper function to get price using the price registry
+    function getPrice(address token, uint256 chainId) external view returns (uint256 priceResult, uint256 timestamp) {
+        return priceRegistry.getPrice(token, chainId);
     }
     
     function _calculateProfitBPS(
