@@ -184,14 +184,14 @@ library MEVProtection {
         
         if (codeSize > 0 && codeSize < 100) {
             // Very small contracts are often simple MEV bots
-            isMEVBot = true;
+            botDetected = true;
             confidence = 60;
         } else if (codeSize > 10000) {
             // Very large contracts might be sophisticated MEV operations
-            isMEVBot = true;
+            botDetected = true;
             confidence = 40;
         } else {
-            isMEVBot = false;
+            botDetected = false;
             confidence = 0;
         }
     }
