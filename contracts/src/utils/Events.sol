@@ -54,6 +54,7 @@ library Events {
     );
     
     // Configuration events
+    event ArbitrageConfigUpdated(uint256 minProfitBPS, uint256 maxSlippageBPS, uint256 userProfitShareBPS);
     event MinProfitThresholdUpdated(uint256 oldThreshold, uint256 newThreshold);
     event MaxSlippageUpdated(uint256 oldSlippage, uint256 newSlippage);
     event UserProfitShareUpdated(uint256 oldShare, uint256 newShare);
