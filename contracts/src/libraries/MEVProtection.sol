@@ -276,7 +276,7 @@ library MEVProtection {
         uint256 suspiciousGasPrices = 0;
         
         for (uint256 i = 0; i < recentTxs.count; i++) {
-            TransactionFingerprint memory tx = recentTxs.transactions[i];
+            TransactionFingerprint memory txData = recentTxs.transactions[i];
             
             // Check if transaction is in the detection window
             if (tx.blockNumber + SANDWICH_DETECTION_WINDOW >= currentTx.blockNumber) {
