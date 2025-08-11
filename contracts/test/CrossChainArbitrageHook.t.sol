@@ -49,7 +49,7 @@ contract CrossChainArbitrageHookTest is Test {
     
     function setUp() public {
         // Deploy the PoolManager first
-        poolManager = new PoolManager();
+        poolManager = new PoolManager(address(this));
         acrossSpokePool = new MockAcrossSpokePool();
         
         // Mine a salt that will produce a valid hook address
