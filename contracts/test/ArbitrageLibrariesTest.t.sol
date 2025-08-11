@@ -58,7 +58,7 @@ contract ArbitrageLibrariesTest is Test {
         assertTrue(profitable == true || profitable == false);
     }
     
-    function testChainPriceDataStructure() public pure {
+    function testChainPriceDataStructure() public view {
         IArbitrageHook.ChainPriceData memory priceData = IArbitrageHook.ChainPriceData({
             chainId: ChainConstants.ETHEREUM_CHAIN_ID,
             price: 1800e18, // $1800
