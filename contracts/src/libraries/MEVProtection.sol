@@ -169,7 +169,7 @@ library MEVProtection {
     /**
      * @notice Check if an address is a known MEV bot
      * @param addr Address to check
-     * @return isMEVBot Whether the address is a known MEV bot
+     * @return botDetected Whether the address is a known MEV bot
      * @return confidence Confidence level of the assessment
      */
     function isMEVBot(address addr) internal pure returns (bool botDetected, uint256 confidence) {
