@@ -12,7 +12,7 @@ import {ProfitCalculator} from "../src/libraries/ProfitCalculator.sol";
  * @notice Test the arbitrage calculation libraries
  */
 contract ArbitrageLibrariesTest is Test {
-    function testProfitCalculatorBPS() public pure {
+    function testProfitCalculatorBPS() public view {
         IArbitrageHook.ArbitrageOpportunity memory opportunity = IArbitrageHook.ArbitrageOpportunity({
             tokenIn: address(0x1),
             tokenOut: address(0x2),
