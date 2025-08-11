@@ -64,10 +64,13 @@ contract CrossChainArbitrageHookTest is Test {
             abi.encode(address(poolManager), address(acrossSpokePool))
         );
         
-        // Deploy the hook using CREATE2 with the computed salt
+        // Deploy the hook using CREATE2 with the computed salt  
         hook = new CrossChainArbitrageHook{salt: salt}(
             IPoolManager(address(poolManager)),
-            address(acrossSpokePool)
+            address(acrossSpokePool),
+            address(0), // arbitrageManager - will be set later
+            address(0), // chainManager - will be set later
+            address(0)  // profitDistributor - will be set later
         );
         
         // Verify the hook address matches
