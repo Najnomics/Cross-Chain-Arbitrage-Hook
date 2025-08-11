@@ -61,7 +61,7 @@ contract CrossChainArbitrageHookTest is Test {
             address(this),
             permissions,
             type(CrossChainArbitrageHook).creationCode,
-            abi.encode(address(poolManager), address(acrossSpokePool))
+            abi.encode(address(poolManager), address(acrossSpokePool), address(0), address(0), address(0))
         );
         
         // Deploy the hook using CREATE2 with the computed salt  
