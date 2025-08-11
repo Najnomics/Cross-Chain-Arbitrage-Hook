@@ -145,7 +145,7 @@ contract CrossChainArbitrageHook is BaseHook, IArbitrageHook, Ownable, Reentranc
         bytes calldata hookData
     ) internal override returns (bytes4, int128) {
         // Post-swap analytics and cleanup can be added here
-        return (BaseHook._afterSwap.selector, 0);
+        return (BaseHook.afterSwap.selector, 0);
     }
     
     /**
