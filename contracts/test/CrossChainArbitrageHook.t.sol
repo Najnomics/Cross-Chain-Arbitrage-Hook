@@ -10,10 +10,8 @@ import {PoolKey} from "@uniswap/v4-core/src/types/PoolKey.sol";
 import {Currency} from "@uniswap/v4-core/src/types/Currency.sol";
 import {Hooks} from "@uniswap/v4-core/src/libraries/Hooks.sol";
 import {SwapParams} from "@uniswap/v4-core/src/types/PoolOperation.sol";
-
-contract MockPoolManager {
-    // Minimal mock implementation for testing
-}
+import {PoolManager} from "@uniswap/v4-core/src/PoolManager.sol";
+import {HookMiner} from "./utils/HookMiner.sol";
 
 contract MockAcrossSpokePool {
     mapping(bytes32 => bool) public intents;
@@ -40,7 +38,7 @@ contract MockAcrossSpokePool {
 
 contract CrossChainArbitrageHookTest is Test {
     CrossChainArbitrageHook hook;
-    MockPoolManager poolManager;
+    PoolManager poolManager;
     MockAcrossSpokePool acrossSpokePool;
     
     address alice = makeAddr("alice");
@@ -50,13 +48,30 @@ contract CrossChainArbitrageHookTest is Test {
     address constant USDC = 0xa0b86a33e6441A8CcA877a7f0b5c5a67b82F6D7A;
     
     function setUp() public {
-        poolManager = new MockPoolManager();
+        // Deploy the PoolManager first
+        poolManager = new PoolManager();
         acrossSpokePool = new MockAcrossSpokePool();
         
-        hook = new CrossChainArbitrageHook(
+        // Mine a salt that will produce a valid hook address
+        uint160 permissions = uint160(
+            Hooks.BEFORE_SWAP_FLAG | Hooks.AFTER_SWAP_FLAG
+        );
+        
+        (address hookAddress, bytes32 salt) = HookMiner.find(
+            address(this),
+            permissions,
+            type(CrossChainArbitrageHook).creationCode,
+            abi.encode(address(poolManager), address(acrossSpokePool))
+        );
+        
+        // Deploy the hook using CREATE2 with the computed salt
+        hook = new CrossChainArbitrageHook{salt: salt}(
             IPoolManager(address(poolManager)),
             address(acrossSpokePool)
         );
+        
+        // Verify the hook address matches
+        require(address(hook) == hookAddress, "Hook address mismatch");
         
         // Setup initial configuration
         hook.updateConfiguration(50, 100, 7000); // 0.5% min profit, 1% max slippage, 70% user share
@@ -70,7 +85,7 @@ contract CrossChainArbitrageHookTest is Test {
         assertFalse(permissions.afterAddLiquidity);
     }
     
-    function testAnalyzeArbitrageOpportunity() public {
+    function testAnalyzeArbitrageOpportunity() public view {
         PoolKey memory key = PoolKey({
             currency0: Currency.wrap(WETH),
             currency1: Currency.wrap(USDC),
