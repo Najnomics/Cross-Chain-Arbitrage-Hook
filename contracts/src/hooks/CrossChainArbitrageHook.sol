@@ -41,10 +41,18 @@ contract CrossChainArbitrageHook is BaseHook, IArbitrageHook, Ownable, Reentranc
     using PriceOracle for PriceOracle.PriceFeedRegistry;
     using AcrossIntegration for AcrossIntegration.AcrossConfig;
     using ProfitCalculator for ProfitCalculator.ArbitrageParameters;
+    using GasEstimator for uint256;
+    using MEVProtection for bytes32;
     
     // State variables
     PriceOracle.PriceFeedRegistry private priceRegistry;
     AcrossIntegration.AcrossConfig private acrossConfig;
+    MEVProtection.MEVConfig private mevConfig;
+    
+    // Manager contracts
+    ArbitrageManager public arbitrageManager;
+    ChainManager public chainManager;
+    ProfitDistributor public profitDistributor;
     
     // Configuration
     uint256 public minProfitBPS = 50; // 0.5% minimum profit
