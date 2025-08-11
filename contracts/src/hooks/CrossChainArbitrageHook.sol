@@ -250,10 +250,22 @@ contract CrossChainArbitrageHook is BaseHook, IArbitrageHook, Ownable, Reentranc
             (tokenIn, tokenOut) = (tokenOut, tokenIn); // Swap direction
         }
         
-        // Get current local price (simplified - would use actual pool price)
-        uint256 localPrice = 1e18; // Placeholder: 1:1 ratio
+        // Use ArbitrageManager if available, otherwise fallback to basic analysis
+        if (address(arbitrageManager) != address(0)) {
+            try arbitrageManager.detectOpportunities(tokenIn, tokenOut, amountIn) returns (
+                ArbitrageOpportunity[] memory opportunities
+            ) {
+                if (opportunities.length > 0) {
+                    // Return the best opportunity (first one is typically best)
+                    return opportunities[0];
+                }
+            } catch {
+                // Fallback to basic analysis
+            }
+        }
         
-        // Find best cross-chain opportunity
+        // Basic analysis fallback
+        uint256 localPrice = 1e18; // Placeholder: 1:1 ratio
         uint256 bestProfitBPS = 0;
         uint256 bestChainId = block.chainid;
         
